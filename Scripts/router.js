@@ -36,7 +36,7 @@ var core;
 let router = new core.Router();
 router.AddTable(["/", "/home", "/about", "/services", "/contact", "/contact-list", "/projects", "/register", "/login", "/edit"]);
 let route = location.pathname;
-console.log(route);
+console.log(router);
 if (router.Find(route) > -1) {
     router.ActiveLink = (route == "/") ? "home" : route.substring(1);
 }

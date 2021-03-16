@@ -89,7 +89,7 @@ router.AddTable(["/", "/home", "/about", "/services", "/contact", "/contact-list
 
 let route = location.pathname;  // alias for location.pathName
 
-console.log(route);
+console.log(router);
 
 if(router.Find(route) > -1)
 {
