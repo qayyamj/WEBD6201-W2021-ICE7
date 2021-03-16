@@ -79,7 +79,7 @@ namespace core
         "FullName": this.FullName,
         "ContactNumber": this.ContactNumber,
         "EmailAddress": this.EmailAddress
-      };
+      }
     }
 
     /**

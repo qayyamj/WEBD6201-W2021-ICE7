@@ -38,7 +38,6 @@ var core;
                     "EmailAddress";
                 this.EmailAddress;
             }
-            ;
         }
         fromJSON(data) {
             this.FullName = data.FullName;
