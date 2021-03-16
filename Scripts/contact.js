@@ -1,5 +1,6 @@
 "use strict";
-((core) => {
+var core;
+(function (core) {
     class Contact {
         constructor(fullName = "", contactNumber = "", emailAddress = "") {
             this.FullName = fullName;
@@ -37,6 +38,7 @@
                     "EmailAddress";
                 this.EmailAddress;
             }
+            ;
         }
         fromJSON(data) {
             this.FullName = data.FullName;

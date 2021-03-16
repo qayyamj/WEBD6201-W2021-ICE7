@@ -1,8 +1,9 @@
 
 // Contact Class
 
-((core)=>{
-  class Contact 
+namespace core
+{
+  export class Contact 
   {
     // Instance Variables
     private m_fullName: string;
@@ -78,7 +79,7 @@
         "FullName": this.FullName,
         "ContactNumber": this.ContactNumber,
         "EmailAddress": this.EmailAddress
-      }
+      };
     }
 
     /**
@@ -127,8 +128,6 @@
     }
   }
 
-  core.Contact = Contact;
-
-})(core || (core={}));
+}
 
 
