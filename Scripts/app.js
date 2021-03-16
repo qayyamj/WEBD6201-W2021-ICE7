@@ -11,7 +11,7 @@ var core;
                 router.ActiveLink = $(this).attr("id");
                 loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
                 $(`#${router.ActiveLink}`).addClass("active");
-                history.pushState({}, "", router.ActiveLink);
+                history.pushState({}, router.ActiveLink);
             });
             $("a").on("mouseover", function () {
                 $(this).css('cursor', 'pointer');

@@ -33,7 +33,7 @@ namespace core
           router.ActiveLink = $(this).attr("id");
           loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
           $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
-          history.pushState({},"", router.ActiveLink); // this replaces the url displayed in the browser
+          history.pushState({}, router.ActiveLink); // this replaces the url displayed in the browser
         });
 
         // make it look like each nav item is an active link
@@ -79,7 +79,6 @@ namespace core
     function displayHome(): void
     {
       console.log("Home page function called");
-        
     }
 
     function displayAbout(): void
