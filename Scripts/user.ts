@@ -76,7 +76,7 @@
      *
      * @returns {string}
      */
-    toString() : string
+    public toString() : string
     {
       return `Display Name     : ${this.DisplayName} \nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
     }
@@ -86,7 +86,7 @@
      *
      * @returns {Object}
      */
-    toJSON() :Object
+    public toJSON() :Object
     {
       return {
         "DisplayName": this.DisplayName,
@@ -101,7 +101,7 @@
      * @param {Object} data
      * @returns {void}
      */
-    fromJSON(data: any): void
+    public fromJSON(data: any): void
     {
       this.DisplayName = data.DisplayName;
       this.EmailAddress = data.EmailAddress;
@@ -114,7 +114,7 @@
      *
      * @returns {string}
      */
-    serialize(): string
+    public serialize(): string
     {
       if(this.DisplayName !== "" && this.EmailAddress !== "" && this.Username !== "")
       {
@@ -133,7 +133,7 @@
      * @param {string} data
      * @return {void}
      */
-    deserialize(data:string):void
+    public deserialize(data:string):void
     {
       let propertyArray = data.split(",");
       this.DisplayName = propertyArray[0];
