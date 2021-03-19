@@ -76,6 +76,9 @@ namespace core
     {
       return 
       {
+        "FullName": this.FullName,
+        "ContactNumber": this.ContactNumber,
+        "EmailAddress": this.EmailAddress
       }
     }
 
