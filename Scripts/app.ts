@@ -8,53 +8,80 @@
 
 namespace core
 {
-/**
- * This method switches page content relative to the link that is passed into the function
- * optinally, link data can also be passed
- * @param {string} link 
- * @param {string} data 
- */
+
+  function addLinkEvents():void
+  {
+    // remove all events first
+    $("ul>li>a").off("click");
+    // make it look like each nav item is an active link
+    $("ul>li>a").off("mouseover");
+
+    // loop through each anchor tag in the unordered list and 
+    // add an event listener / handler to allow for 
+    // content injection
+    $("ul>li>a").on("click", function()
+    {
+      loadLink($(this).attr("id"));
+    });
+
+    // make it look like each nav item is an active link
+    $("ul>li>a").on("mouseover", function()
+    {
+      $(this).css('cursor', 'pointer');
+    });
+
+  }
+
+  function highlightActiveLink(link:string, data:string = ""):void
+  {
+        // swap active link
+        $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
+
+        if(link == "logout")
+        {
+          sessionStorage.clear();
+          router.ActiveLink = "login";
+        }
+        else
+        {
+          router.ActiveLink = link;
+          router.LinkData = data;
+        }
+        $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
+  }
+
+  /**
+   * This method switches page content relative to the link that is passed into the function
+   * optinally, link data can also be passed
+   * @param {string} link 
+   * @param {string} data 
+   */
   function loadLink(link:string, data:string = ""):void
   {
-    $(`#${router.ActiveLink}`).removeClass("active"); // removes highlighted link
-    router.ActiveLink = link;
-    router.LinkData = data;
+    highlightActiveLink(link, data);
     loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
-    $(`#${router.ActiveLink}`).addClass("active"); // applies highlighted link to new page
     history.pushState({}, router.ActiveLink); // this replaces the url displayed in the browser
   }
-    /**
-     * Inject the Navigation bar into the Header element and highlight the active link based on the pageName parameter
-     *
-     * @param {string} pageName
-     */
-    function loadHeader(pageName:string) :void
+
+  /**
+   * Inject the Navigation bar into the Header element and highlight the active link based on the pageName parameter
+   *
+   * @param {string} pageName
+   */
+  function loadHeader(pageName:string) :void
+  {
+    // inject the Header
+    $.get("./Views/Components/header.html", function(data)
     {
-      // inject the Header
-      $.get("./Views/Components/header.html", function(data)
-      {
-        $("header").html(data); // load the navigation bar
-        
-        toggleLogin(); // add login / logout and secure links
-        
-        $(`#${pageName}`).addClass("active"); // highlight active link
+      $("header").html(data); // load the navigation bar
+      
+      
+      $(`#${pageName}`).addClass("active"); // highlight active link
 
-        // loop through each anchor tag in the unordered list and 
-        // add an event listener / handler to allow for 
-        // content injection
-        $("a").on("click", function()
-        {
-          loadLink($(this).attr("id"));
-        });
-
-        // make it look like each nav item is an active link
-        $("a").on("mouseover", function()
-        {
-          $(this).css('cursor', 'pointer');
-        });
-        
-      });
-    }
+      addLinkEvents();
+      
+    });
+  }
 
     /**
      * Inject page content in the main element 
@@ -70,6 +97,7 @@ namespace core
       {
         $("main").html(data);
 
+        toggleLogin();
         callback();
       });
       
@@ -89,7 +117,7 @@ namespace core
 
     function displayHome(): void
     {
-      console.log("Home page function called");
+
     }
 
     function displayAbout(): void
@@ -375,42 +403,47 @@ namespace core
 
     function toggleLogin():void
     {
+      let contactListLink = $("#contactListLink")[0];   // makes reference to contact-list link
       // if user is logged in
       if(sessionStorage.getItem("user"))
-      {
+      { // Logged In------------------------
+
         // swap out the login link for logout
         $("#loginListItem").html(
         `<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`
         );
 
-        $("#logout").on("click", function()
-        {
-          // perform logout
-          sessionStorage.clear();
-
-          // redirect back to login
-          loadLink("login");
-        });
-
-        // make it look like each nav item is an active link
-        $("#logout").on("mouseover", function()
-        {
-          $(this).css('cursor', 'pointer');
-        });
        
-        $(`<li class="nav-item">
+        if(!contactListLink)  // checks if contact-list link is not already active
+        {
+          // add contact-list link
+        $(`<li id="contactListLink" class="nav-item">
             <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
            </li>`).insertBefore("#loginListItem");
-      
+        }
       }
       else
       {
+        // Logged out--------------------------
+
         // swap out the login link for logout
         $("#loginListItem").html(
           `<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`
           );
+
+                 
+          if(contactListLink)  // checks if contact-list link is present
+          {
+          // remove contact-list link
+          $("#contactListLink").remove();
+
+          }
       }
+      addLinkEvents();
     }
+
+
+    
 
     function authGuard():void
     {
@@ -456,8 +489,6 @@ namespace core
      */
     function Start(): void
     {
-        console.log("App Started...");
-
         loadHeader(router.ActiveLink);
       
         loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));

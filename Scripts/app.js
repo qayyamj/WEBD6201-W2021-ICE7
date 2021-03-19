@@ -1,30 +1,44 @@
 "use strict";
 var core;
 (function (core) {
-    function loadLink(link, data = "") {
+    function addLinkEvents() {
+        $("ul>li>a").off("click");
+        $("ul>li>a").off("mouseover");
+        $("ul>li>a").on("click", function () {
+            loadLink($(this).attr("id"));
+        });
+        $("ul>li>a").on("mouseover", function () {
+            $(this).css('cursor', 'pointer');
+        });
+    }
+    function highlightActiveLink(link, data = "") {
         $(`#${router.ActiveLink}`).removeClass("active");
-        router.ActiveLink = link;
-        router.LinkData = data;
-        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        if (link == "logout") {
+            sessionStorage.clear();
+            router.ActiveLink = "login";
+        }
+        else {
+            router.ActiveLink = link;
+            router.LinkData = data;
+        }
         $(`#${router.ActiveLink}`).addClass("active");
+    }
+    function loadLink(link, data = "") {
+        highlightActiveLink(link, data);
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         history.pushState({}, router.ActiveLink);
     }
     function loadHeader(pageName) {
         $.get("./Views/Components/header.html", function (data) {
             $("header").html(data);
-            toggleLogin();
             $(`#${pageName}`).addClass("active");
-            $("a").on("click", function () {
-                loadLink($(this).attr("id"));
-            });
-            $("a").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
+            addLinkEvents();
         });
     }
     function loadContent(pageName, callback) {
         $.get(`./Views/content/${pageName}.html`, function (data) {
             $("main").html(data);
+            toggleLogin();
             callback();
         });
     }
@@ -34,7 +48,6 @@ var core;
         });
     }
     function displayHome() {
-        console.log("Home page function called");
     }
     function displayAbout() {
     }
@@ -201,22 +214,22 @@ var core;
     function displayRegister() {
     }
     function toggleLogin() {
+        let contactListLink = $("#contactListLink")[0];
         if (sessionStorage.getItem("user")) {
             $("#loginListItem").html(`<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
-            $("#logout").on("click", function () {
-                sessionStorage.clear();
-                loadLink("login");
-            });
-            $("#logout").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
-            $(`<li class="nav-item">
+            if (!contactListLink) {
+                $(`<li id="contactListLink" class="nav-item">
             <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
            </li>`).insertBefore("#loginListItem");
+            }
         }
         else {
             $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            if (contactListLink) {
+                $("#contactListLink").remove();
+            }
         }
+        addLinkEvents();
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {
@@ -243,7 +256,6 @@ var core;
         }
     }
     function Start() {
-        console.log("App Started...");
         loadHeader(router.ActiveLink);
         loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         loadFooter();
