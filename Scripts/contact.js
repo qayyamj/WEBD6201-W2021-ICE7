@@ -28,17 +28,6 @@ var core;
         toString() {
             return `Full Name     : ${this.FullName} \nContact Number: ${this.ContactNumber}\nEmail Address : ${this.EmailAddress}`;
         }
-        toJSON() {
-            return;
-            {
-                "FullName";
-                this.FullName,
-                    "ContactNumber";
-                this.ContactNumber,
-                    "EmailAddress";
-                this.EmailAddress;
-            }
-        }
         fromJSON(data) {
             this.FullName = data.FullName;
             this.ContactNumber = data.ContactNumber;
