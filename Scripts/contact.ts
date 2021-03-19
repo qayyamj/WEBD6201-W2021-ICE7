@@ -72,7 +72,16 @@ namespace core
      *
      * @returns {Object}
      */
-    
+    // public toJSON():Object
+    // {
+    //   return 
+    //   {
+    //     "FullName": this.FullName,
+    //     "ContactNumber": this.ContactNumber,
+    //     "EmailAddress": this.EmailAddress
+    //   }
+    // }
+
     /**
      * This method takes a JSON data object and assigns the values to the Contact class properties
      *
